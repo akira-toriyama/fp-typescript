@@ -1,7 +1,7 @@
-import { x } from "./a";
+import { a } from "./a";
 
-describe("Example", () => {
+describe("a", () => {
   test("動作確認", () => {
-    expect(x).toBeDefined();
+    expect(a).toBeDefined();
   });
 });
