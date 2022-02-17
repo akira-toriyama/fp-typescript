@@ -1,4 +1,4 @@
-import { identify, add } from "./fp1";
+import { identify, add, multiply } from "./fp1";
 
 describe("identify", () => {
   test("動作確認", () => {
@@ -10,5 +10,11 @@ describe("identify", () => {
 describe("add", () => {
   test("動作確認", () => {
     expect(add(4, 7)).toEqual(11);
+  });
+});
+
+describe("multiply", () => {
+  test("動作確認", () => {
+    expect(multiply(5, 6)).toEqual(30);
   });
 });
