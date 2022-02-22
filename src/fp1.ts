@@ -27,3 +27,36 @@ const times: Times = (cnt, fn, m, memo) =>
 
 type Multiply = (x: number, y: number) => number;
 export const multiply: Multiply = (n, m) => times(n, add, m, 0);
+
+/**
+ * 副作用が分離されていない
+ */
+export const legacyAge = (birthYear: number) => {
+  const today = new Date();
+  return today.getFullYear() - birthYear;
+};
+
+/**
+ * 副作用が分離されている
+ */
+export const age = (birthYear: number, thisYear: number) =>
+  thisYear - birthYear;
+
+export const map =
+  <T>(a: T[]) =>
+  (f: (p: T) => T) =>
+    a.reduce<T[]>((acc, cur) => acc.concat(f(cur)), []);
+
+type Fn<P, R> = (p: P) => R;
+/**
+ * 関数合成
+ */
+export const compose =
+  <P, PnR, R>(f1: Fn<PnR, R>, f2: Fn<P, PnR>) =>
+  (p: P) =>
+    f1(f2(p));
+
+export const enumFrom = (n: number) => [n, () => enumFrom(succ(n))];
+
+// const iterate = (init: number) => (step) =>
+//   [init, step(init)(step)];
