@@ -56,7 +56,28 @@ export const compose =
   (p: P) =>
     f1(f2(p));
 
-export const enumFrom = (n: number) => [n, () => enumFrom(succ(n))];
+type EnumFrom = (n: number) => [number, () => ReturnType<EnumFrom>];
+export const enumFrom: EnumFrom = (n) => [n, () => enumFrom(succ(n))];
 
-// const iterate = (init: number) => (step) =>
-//   [init, step(init)(step)];
+export const iterate = (init: number) => (step: (p: number) => number) =>
+  [init, () => iterate(step(init))(step)];
+
+export const filter =
+  (predicate: (p: number) => boolean) =>
+  (aStream: ReturnType<EnumFrom>): ReturnType<EnumFrom> => {
+    const [head] = aStream;
+
+    if (predicate(head)) {
+      return [head, () => filter(predicate)(aStream[1]())];
+    }
+    return filter(predicate)(aStream[1]());
+  };
+
+export const elemAt =
+  (n: number) =>
+  (aStream: ReturnType<EnumFrom>): ReturnType<EnumFrom> => {
+    if (n === 1) {
+      return aStream;
+    }
+    return elemAt(n - 1)(aStream[1]());
+  };

@@ -50,8 +50,33 @@ describe(fp1.compose.name, () => {
 
 describe(fp1.enumFrom.name, () => {
   test("動作確認", () => {
-    const r = fp1.enumFrom(10);
+    const v = 10;
+    const [r] = fp1.enumFrom(v);
+    expect(r).toEqual(v);
+  });
+});
 
-    r.map((v) => console.log({ v }));
+describe(fp1.iterate.name, () => {
+  test("動作確認", () => {
+    const v = 10;
+    const [r] = fp1.iterate(v)(fp1.succ);
+    expect(r).toEqual(v);
+  });
+});
+
+describe(fp1.filter.name, () => {
+  test("動作確認", () => {
+    const [r] = fp1.filter((p) => p % 5 === 1)(fp1.enumFrom(7));
+    expect(r).toEqual(11);
+  });
+});
+
+describe(fp1.elemAt.name, () => {
+  test("動作確認", () => {
+    const p1 = 5;
+    const p2 = 7;
+    const [r] = fp1.elemAt(p1)(fp1.enumFrom(p2));
+
+    expect(r).toEqual(p1 + p2 - 1);
   });
 });
