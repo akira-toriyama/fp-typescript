@@ -81,3 +81,13 @@ export const elemAt =
     }
     return elemAt(n - 1)(aStream[1]());
   };
+
+type Env = Record<string, string>;
+const extendEnv = (addData: Env, baseEnv: Env) => {
+  // self.structuredClone()
+  // window.structuredClone()
+  // structuredClone();
+  return { ...baseEnv, ...addData };
+};
+
+const lookupEnv = (key, curentEnv) => {};
