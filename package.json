@@ -13,5 +13,8 @@
   },
   "scripts": {
     "test": "jest --watch"
+  },
+  "dependencies": {
+    "fp-ts": "2.11.8"
   }
 }
