@@ -1,3 +1,5 @@
+import { string } from "fp-ts";
+
 /**
  * 恒等関数
  * 入力値と同じ値を返す関数
@@ -81,3 +83,36 @@ export const elemAt =
     }
     return elemAt(n - 1)(aStream[1]());
   };
+
+// 代数的データ構造によるリスト
+// ---------------------------------------------------
+type Keys = "yen" | "dollar";
+type Unit = string;
+type WaName = string;
+
+type BasePattern<T> = Record<Keys, T>;
+type UnitPattern<K extends Keys> = Pick<BasePattern<Unit>, K>;
+
+const match = (
+  data: ReturnType<CurrencyFn<Keys, Unit>>,
+  pattern: BasePattern<Unit>
+) => data(pattern);
+
+type CurrencyFn<T extends Keys, R> = () => (pattern: UnitPattern<T>) => R;
+
+export const yen: CurrencyFn<"yen", Unit> = () => (pattern) => pattern.yen;
+export const dollar: CurrencyFn<"dollar", Unit> = () => (pattern) =>
+  pattern.dollar;
+
+export const unit = (currency: ReturnType<CurrencyFn<Keys, Unit>>) =>
+  match(currency, {
+    yen: "円",
+    dollar: "$",
+  });
+
+export const waName = (currency: ReturnType<CurrencyFn<Keys, WaName>>) =>
+  match(currency, {
+    yen: "えん",
+    dollar: "どる",
+  });
+// ---------------------------------------------------

@@ -1,44 +1,44 @@
 import * as fp1 from "./fp1";
 
-describe(fp1.identify.name, () => {
+describe("identify", () => {
   test("動作確認", () => {
     const x = 42;
     expect(fp1.identify(42)).toEqual(x);
   });
 });
 
-describe(fp1.add.name, () => {
+describe("add", () => {
   test("動作確認", () => {
     expect(fp1.add(4, 7)).toEqual(11);
   });
 });
 
-describe(fp1.multiply.name, () => {
+describe("multiply", () => {
   test("動作確認", () => {
     expect(fp1.multiply(5, 6)).toEqual(30);
   });
 });
 
-describe(fp1.legacyAge.name, () => {
+describe("legacyAge", () => {
   test("動作確認", () => {
     expect(fp1.legacyAge(1)).toBeDefined();
   });
 });
 
-describe(fp1.age.name, () => {
+describe("age", () => {
   test("動作確認", () => {
     expect(fp1.age(2000, 2010)).toEqual(10);
   });
 });
 
-describe(fp1.map.name, () => {
+describe("map", () => {
   test("動作確認", () => {
     const c = fp1.map([1, 10, 20]);
     expect(c(fp1.succ)).toEqual([2, 11, 21]);
   });
 });
 
-describe(fp1.compose.name, () => {
+describe("compose", () => {
   test("動作確認", () => {
     const f1 = (p: number) => p + 1;
     const f2 = (p: number) => p * 5;
@@ -48,7 +48,7 @@ describe(fp1.compose.name, () => {
   });
 });
 
-describe(fp1.enumFrom.name, () => {
+describe("enumFrom", () => {
   test("動作確認", () => {
     const v = 10;
     const [r] = fp1.enumFrom(v);
@@ -56,7 +56,7 @@ describe(fp1.enumFrom.name, () => {
   });
 });
 
-describe(fp1.iterate.name, () => {
+describe("iterate", () => {
   test("動作確認", () => {
     const v = 10;
     const [r] = fp1.iterate(v)(fp1.succ);
@@ -64,19 +64,33 @@ describe(fp1.iterate.name, () => {
   });
 });
 
-describe(fp1.filter.name, () => {
+describe("filter", () => {
   test("動作確認", () => {
     const [r] = fp1.filter((p) => p % 5 === 1)(fp1.enumFrom(7));
     expect(r).toEqual(11);
   });
 });
 
-describe(fp1.elemAt.name, () => {
+describe("elemAt", () => {
   test("動作確認", () => {
     const p1 = 5;
     const p2 = 7;
     const [r] = fp1.elemAt(p1)(fp1.enumFrom(p2));
 
     expect(r).toEqual(p1 + p2 - 1);
+  });
+});
+
+describe("unit", () => {
+  test("動作確認", () => {
+    const r = fp1.unit(fp1.yen());
+    expect(r).toEqual("円");
+  });
+});
+
+describe("waName", () => {
+  test("動作確認", () => {
+    const r = fp1.waName(fp1.yen());
+    expect(r).toEqual("えん");
   });
 });
