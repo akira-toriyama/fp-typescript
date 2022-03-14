@@ -94,3 +94,17 @@ describe("waName", () => {
     expect(r).toEqual("えん");
   });
 });
+
+describe("sum2", () => {
+  test("動作確認", () => {
+    const a = [1, 2, 3];
+    expect(fp1.sum1(a)).toEqual(6);
+  });
+});
+
+describe("sum2", () => {
+  test("動作確認", () => {
+    const a = [1, 2, 3];
+    expect(fp1.sum2(a)).toEqual(6);
+  });
+});

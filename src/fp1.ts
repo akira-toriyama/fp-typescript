@@ -116,3 +116,26 @@ export const waName = (currency: ReturnType<CurrencyFn<Keys, WaName>>) =>
     dollar: "どる",
   });
 // ---------------------------------------------------
+
+// 破壊的
+export const sum1 = (p: number[], ans = 0): number => {
+  const n = p.pop();
+
+  if (n == null) {
+    return ans;
+  }
+
+  return sum1(p, ans + n);
+};
+
+// 破壊的 ではない
+export const sum2 = (p: number[], ans = 0): number => {
+  const [n, ...r] = p;
+  const sum = ans + n;
+
+  if (r.length === 0) {
+    return sum;
+  }
+
+  return sum2(r, sum);
+};
