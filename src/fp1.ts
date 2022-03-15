@@ -139,3 +139,13 @@ export const sum2 = (p: number[], ans = 0): number => {
 
   return sum2(r, sum);
 };
+
+// 遅延評価風
+type LazyMultiply = (fX: () => number, fY: () => number) => number;
+export const lazyMultiply: LazyMultiply = (fX, fY) => {
+  const x = fX();
+  if (x === 0) {
+    return 0;
+  }
+  return x * fY();
+};

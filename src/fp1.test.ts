@@ -108,3 +108,14 @@ describe("sum2", () => {
     expect(fp1.sum2(a)).toEqual(6);
   });
 });
+
+describe("lazyMultiply", () => {
+  test("動作確認", () => {
+    fp1.lazyMultiply(
+      // 値を関数でラップ
+      // 引数の無い関数で値がラップされた構造を thunk と呼ぶ
+      () => 0,
+      () => 10
+    );
+  });
+});
