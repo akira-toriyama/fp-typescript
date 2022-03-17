@@ -149,3 +149,9 @@ export const lazyMultiply: LazyMultiply = (fX, fY) => {
   }
   return x * fY();
 };
+
+type Tap = <V>(p: V, f: (p: V) => void) => V;
+const tap: Tap = (target, sideEffect) => {
+  sideEffect(target);
+  return target;
+};
