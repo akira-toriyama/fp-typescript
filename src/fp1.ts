@@ -1,4 +1,4 @@
-import { string } from "fp-ts";
+import fs from "fs";
 
 /**
  * 恒等関数
