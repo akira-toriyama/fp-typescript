@@ -32,3 +32,22 @@ describe("factorial", () => {
     expect(r).toEqual(120);
   });
 });
+
+describe("counter", () => {
+  test(".", () => {
+    const counter = fp2.counter(1);
+
+    expect(counter()).toEqual(2);
+    expect(counter()).toEqual(3);
+  });
+});
+
+describe("objModule", () => {
+  test(".", () => {
+    const r1 = fp2.objModule.set("foo", "FOO")(() => null);
+    const r2 = fp2.objModule.set("bar", "Bar")(r1);
+
+    const ans = fp2.objModule.get("foo")(r2);
+    expect(ans).toEqual("FOO");
+  });
+});

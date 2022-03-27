@@ -32,24 +32,48 @@ const x = composeVer1(fn1, fn2);
 // 再起をするHoF
 // ----------------------------------------
 type Todo = any;
-const yCombinator = (f: Todo) => {
-  return ((x) => {
-    return f((y: Todo) => {
+const yCombinator = (f: (...a: Todo) => Todo) => {
+  return ((x: (p: Todo) => Todo) => {
+    return f((y: number) => {
       return x(x)(y);
     });
   })((x: Todo) => {
-    return f((y: Todo) => {
+    return f((y: number) => {
       return x(x)(y);
     });
   });
 };
 
-export const factorial = yCombinator((fact: Todo) => {
-  return (n: Todo) => {
-    if (n === 0) {
-      return 1;
-    }
-    return n * fact(n - 1);
-  };
-});
+const factorialFn = (f: (p: number) => number) => (v: number) => {
+  if (v === 0) {
+    return 1;
+  }
+  return v * f(v - 1);
+};
+
+export const factorial = yCombinator(factorialFn);
 // ----------------------------------------
+
+/**
+ * クロージャーとしてのカウンター
+ */
+export const counter = (init: number) => {
+  let x = init;
+  return () => {
+    x = x + 1;
+    return x;
+  };
+};
+
+/**
+ * カリー化された不変のobj
+ */
+export const objModule = {
+  set:
+    (k: string, v: unknown) =>
+    (o: (p: unknown) => unknown) =>
+    (queryKey: unknown) =>
+      k === queryKey ? v : objModule.get(queryKey)(o),
+  // @ts-expect-error
+  get: (k) => (o) => o(k),
+};
