@@ -12,10 +12,12 @@ describe("id", () => {
 
 describe("maybe, Maybe", () => {
   test("1", () => {
-    const one = fp3.maybe.just(1);
-    const two = fp3.maybe.just(2);
+    const one = fp3.just(1);
+    const two = fp3.nothing("");
 
     const r = fp3.add(one, two);
-    console.log({ r });
+
+    const rr = fp3.getOrElse(r)("xx");
+    console.log({ rr });
   });
 });

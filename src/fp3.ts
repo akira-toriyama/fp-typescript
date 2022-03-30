@@ -17,28 +17,36 @@ export const id = {
 
 // Maybe
 // --------------------------------------------
-/**
- * Maybeの代数的構造
- */
-export const maybe = {
+
+// Maybeの代数的構造
+// -------
+
+// @ts-expect-error
+export const match = (exp, pattern) => exp(pattern);
+
+export const just =
+  <T>(value: T) =>
   // @ts-expect-error
-  match: (exp, pattern) => exp.call(pattern, pattern),
+  (pattern) =>
+    pattern.just(value);
+
+export const nothing =
+  <T>(_: T) =>
   // @ts-expect-error
-  just: (value) => (pattern) => pattern.just(value),
-  // @ts-expect-error
-  nothing: (_) => (pattern) => pattern.nothing(_),
-};
+  (pattern) =>
+    pattern.nothing(_);
+// -------
 
 export const MaybeMonad = {
   // @ts-expect-error
-  unit: (value) => maybe.just(value),
+  unit: (value) => just(value),
   // @ts-expect-error
   flatMap: (m) => (f) =>
-    maybe.match(m, {
+    match(m, {
       // @ts-expect-error
       just: (value) => f(value),
       // @ts-expect-error
-      nothing: (_) => maybe.nothing(_),
+      nothing: (_) => nothing(_),
     }),
 };
 
@@ -50,4 +58,17 @@ export const add = (mA, mB) =>
     // @ts-expect-error
     MaybeMonad.flatMap(mB)((b) => MaybeMonad.unit(a + b))
   );
+
+// @ts-expect-error
+export const getOrElse = (m) => {
+  // @ts-expect-error
+  return (alternate) => {
+    return match(m, {
+      // @ts-expect-error
+      just: (v) => v,
+      // @ts-expect-error
+      nothing: (_) => alternate,
+    });
+  };
+};
 // --------------------------------------------
