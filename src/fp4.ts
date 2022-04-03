@@ -1,60 +1,57 @@
-// 代数的データ型
+/**
+ * `T`のユニオンを作る
+ * 判別用に`type`を付与
+ */
+type CreateUsers<T extends Record<PropertyKey, object>> = {
+  [k in keyof T]: T[k] & { type: k };
+}[keyof T];
 
-type User1 = {
-  id: number;
-  name: string;
-  mail: string;
-};
+type User = CreateUsers<{
+  /**
+   * アカウント作成済み
+   */
+  Member: { id: number; name: string; mail: string };
+  /**
+   * 仮登録
+   */
+  Guest: { name: string };
 
-const member: User1 = {
-  id: 1,
-  name: "Alice",
-  mail: "alice@mail.com",
-};
+  // /**
+  //  * 増える予定
+  //  */
+  // GoldMember: { id: number; name: string; mail: string };
+}>;
 
-// つらみ -> 使わないプロパティに対してダミーの値を与える必要があります。
-const guest: User1 = {
-  id: -1, // ゲストユーザーにはIDが付与されない
-  name: "Bob",
-  mail: "", // ゲストユーザーはメールアドレス登録を行っていない
-};
-// ----------------------------------------------------------------------
+/**
+ *  
+ * 使用例
+ * 
+ ```ts
+ const alice: UserStruct<"Member"> = {
+    type: "Member",
+    id: 1,
+    name: "alice",
+    mail: "alice@gmail.com",
+   };
+ ```
+ */
+type UserStruct<Tag extends User["type"]> = Extract<User, Record<"type", Tag>>;
 
-class Member {
-  constructor(public id: number, public name: string, public mail: string) {}
-}
+// ---
 
-class Guest {
-  constructor(public name: string) {}
-}
-
-class LegacyMember {
-  constructor() {}
-}
-
-// 上記のつらみを Unionでかいけつ
-type User2 = Member | Guest;
-
-// type User3 = Member | Guest | LegacyMember;
-
-const exhaustiveCheck = (_: never) => {
-  throw new Error("Exhaustive check failed.");
-};
-
-const showMessage = (user: User2): string => {
-  if (user instanceof Guest) {
-    return `こんにちは ${user.name} さん。会員登録はいかがですか？`;
+const match = <Result>(
+  value: User,
+  patterns: {
+    [K in User["type"]]: (param: Omit<UserStruct<K>, "type">) => Result;
   }
+) => {
+  // TODO any
+  return patterns[value.type](value as any);
+};
 
-  if (user instanceof Member) {
-    return `こんにちは ${user.name} さん。あなたのメールアドレス: ${user.mail} `;
-  }
-
-  // 考慮すべき型が網羅されているか
-  // もし、LegacyMemberが追加されてもtype errorになる
-  const _: never = user;
-  return "";
-
-  // util関数を作ると良い
-  // return exhaustiveCheck(user);
+const f = (user: User) => {
+  const r = match(user, {
+    Member: (member) => member.mail,
+    Guest: (guest) => guest.name,
+  });
 };
